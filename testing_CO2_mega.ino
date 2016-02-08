@@ -1,12 +1,36 @@
 #include <SoftwareSerial.h>
- 
+#include <Wire.h>
+#include "rgb_lcd.h"
+#include "DHT.h"
+
+#define DHTPIN A2     // what pin we're connected to
+
+// Uncomment whatever type you're using!
+//#define DHTTYPE DHT11   // DHT 11 
+#define DHTTYPE DHT22   // DHT 22  (AM2302)
+//#define DHTTYPE DHT21   // DHT 21 (AM2301)
+
+// Connect pin 1 (on the left) of the sensor to +5V
+// Connect pin 2 of the sensor to whatever your DHTPIN is
+// Connect pin 4 (on the right) of the sensor to GROUND
+// Connect a 10K resistor from pin 2 (data) to pin 1 (power) of the sensor
+
+DHT dht(DHTPIN, DHTTYPE);
+
+
 #define DEBUG 0
  
 const int pinRx = 13;
 const int pinTx = 12;
  
 SoftwareSerial sensor(pinTx,pinRx);
- 
+
+rgb_lcd lcd;
+
+const int colorR = 0;
+const int colorG = 0;
+const int colorB = 255;
+
 const unsigned char cmd_get_sensor[] =
 {
     0xff, 0x01, 0x86, 0x00, 0x00,
@@ -15,14 +39,25 @@ const unsigned char cmd_get_sensor[] =
 unsigned char dataRevice[9];
 int temperature;
 int CO2PPM;
+
+
  
 void setup()
 {
     sensor.begin(9600);
+    dht.begin();
     Serial.begin(115200);
     Serial.println("get a 'g', begin to read from sensor!");
     Serial.println("********************************************************");
     Serial.println();
+
+    lcd.begin(16, 2);
+    
+    lcd.setRGB(colorR, colorG, colorB);
+    
+    // Print a message to the LCD.
+    //lcd.print("hello, world!");
+
 }
  
 void loop()
@@ -36,8 +71,28 @@ void loop()
         Serial.println("");
         Serial.print("value from air quality sensor: ");
         Serial.println(analogRead(A0));
+
+        lcd.setCursor(0, 0);
+        // print the number of seconds since reset:
+        lcd.print("CO2:");
+        lcd.print(CO2PPM);
+        lcd.print(" ");
+        lcd.print("air:");
+        lcd.print(analogRead(A0));
+        
+        lcd.setCursor(0, 1);
+        // print the number of seconds since reset:
+        float h = dht.readHumidity();
+        float t = dht.readTemperature();
+        lcd.print("T:");
+        lcd.print(t);
+        lcd.print(" H:");
+        lcd.print(h);
+        lcd.print("%");
+    delay(500);
+        
     }
-    delay(1200000);
+    delay(1000);
 }
  
 bool dataRecieve(void)
