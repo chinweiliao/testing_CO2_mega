@@ -27,9 +27,9 @@ SoftwareSerial sensor(pinTx,pinRx);
 
 rgb_lcd lcd;
 
-const int colorR = 0;
+const int colorR = 255;
 const int colorG = 0;
-const int colorB = 255;
+const int colorB = 0;
 
 const unsigned char cmd_get_sensor[] =
 {
@@ -46,7 +46,7 @@ void setup()
 {
     sensor.begin(9600);
     dht.begin();
-    Serial.begin(115200);
+    Serial.begin(9600);
     Serial.println("get a 'g', begin to read from sensor!");
     Serial.println("********************************************************");
     Serial.println();
@@ -89,10 +89,10 @@ void loop()
         lcd.print(" H:");
         lcd.print(h);
         lcd.print("%");
-    delay(500);
+    delay(1000);
         
     }
-    delay(1000);
+    //delay(1000);
 }
  
 bool dataRecieve(void)
