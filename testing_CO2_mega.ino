@@ -64,13 +64,13 @@ void loop()
 {
     if(dataRecieve())
     {
-        Serial.print("Temperature: ");
-        Serial.print(temperature);
-        Serial.print("  CO2: ");
-        Serial.print(CO2PPM);
-        Serial.println("");
-        Serial.print("value from air quality sensor: ");
-        Serial.println(analogRead(A0));
+        //Serial.print("Temperature: ");
+        //Serial.print(temperature);
+        //Serial.print("  CO2: ");
+        Serial.println(CO2PPM);
+        //Serial.println("");
+        //Serial.print("value from air quality sensor: ");
+        //Serial.println(analogRead(A0));
 
         lcd.setCursor(0, 0);
         // print the number of seconds since reset:
@@ -79,6 +79,7 @@ void loop()
         lcd.print(" ");
         lcd.print("air:");
         lcd.print(analogRead(A0));
+        lcd.print(" ");
         
         lcd.setCursor(0, 1);
         // print the number of seconds since reset:
@@ -89,7 +90,7 @@ void loop()
         lcd.print(" H:");
         lcd.print(h);
         lcd.print("%");
-    delay(1000);
+    delay(5000);
         
     }
     //delay(1000);
